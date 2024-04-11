@@ -1,0 +1,278 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: opencpn\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-28 09:51+0100\n"
+"PO-Revision-Date: 2023-09-19 09:58\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: opencpn\n"
+"X-Crowdin-Project-ID: 49843\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: /plugins/printing_pi/po/Printing_pi.pot\n"
+"X-Crowdin-File-ID: 231\n"
+
+#: src/Printing_pi.cpp:163 src/Printing_pi.cpp:229
+#: src/Printinggui_impl.h:105
+msgid "Printing"
+msgstr "Printing"
+
+#: src/Printing_pi.cpp:231
+msgid "Printing player"
+msgstr "Printing player"
+
+#: src/Printing_pi.cpp:233
+msgid "Almost a simulator"
+msgstr "Casi un simulador"
+
+#: src/Printing_pi.cpp:293
+msgid "Select Vessel Start Position"
+msgstr "Seleccione posición inicial del barco"
+
+#: src/Printing_pi.cpp:365
+msgid "MMSI must be 9 digits.\n"
+"Edit using Preferences"
+msgstr "MMSI debe tener 9 dígitos\n"
+"Edite usando Preferencias"
+
+#: src/Printing_pi.cpp:480
+msgid "Grib plugin version not supported."
+msgstr "Versión del plugin Grib no soportada."
+
+#: src/Printing_pi.cpp:481
+#, c-format
+msgid "Use versions %d.%d to %d.%d"
+msgstr "Use las versiones %d.%d a %d.%d"
+
+#: src/Printing_pi.cpp:484
+msgid "Weather Routing"
+msgstr "Ruta Meteorológica "
+
+#: src/Printinggui.h:126
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: src/Printinggui.cpp:50
+msgid "Tiller Control"
+msgstr "Control de timón"
+
+#: src/Printinggui.cpp:71
+msgid "|"
+msgstr "|"
+
+#: src/Printinggui.cpp:74
+msgid "Midships"
+msgstr "Crujía"
+
+#: src/Printinggui.cpp:95
+msgid "Start"
+msgstr "Comienzo"
+
+#: src/Printinggui.cpp:102
+msgid "Stop"
+msgstr "Parar"
+
+#: src/Printinggui.cpp:120
+msgid "  Heading:  "
+msgstr "  Rumbo:  "
+
+#: src/Printinggui.cpp:126
+msgid "000"
+msgstr "000"
+
+#: src/Printinggui.cpp:132
+msgid "             Speed: "
+msgstr "             Velocidad: "
+
+#: src/Printinggui.cpp:138 src/Printinggui.cpp:165
+msgid "0"
+msgstr "0"
+
+#: src/Printinggui.cpp:144
+msgid "        Kts"
+msgstr "        Nudos"
+
+#: src/Printinggui.cpp:175
+msgid "Speed Control"
+msgstr "Control de Velocidad"
+
+#: src/Printinggui.cpp:179
+msgid "100"
+msgstr "100"
+
+#: src/Printinggui.cpp:199
+msgid "Stby"
+msgstr "En espera"
+
+#: src/Printinggui.cpp:202
+msgid "Hand Steering"
+msgstr "Gobierno Manual"
+
+#: src/Printinggui.cpp:207
+msgid "Auto"
+msgstr "Auto"
+
+#: src/Printinggui.cpp:210
+msgid "Autopilot Control"
+msgstr "Control de Piloto Automático"
+
+#: src/Printinggui.cpp:215
+msgid "Follow"
+msgstr "Seguir"
+
+#: src/Printinggui.cpp:221
+msgid "Sail"
+msgstr "Navegar"
+
+#: src/Printinggui.cpp:224
+msgid "Using Sail"
+msgstr "Usando Vela"
+
+#: src/Printinggui.cpp:229
+msgid "-1"
+msgstr "-1"
+
+#: src/Printinggui.cpp:235
+msgid "-10"
+msgstr "-10"
+
+#: src/Printinggui.cpp:241
+msgid "+10"
+msgstr "+10"
+
+#: src/Printinggui.cpp:247
+msgid "+1"
+msgstr "+1"
+
+#: src/Printinggui.cpp:257
+msgid "Alarms"
+msgstr "Alarmas"
+
+#: src/Printinggui.cpp:268 src/Printinggui.cpp:271
+msgid "SART"
+msgstr "SART"
+
+#: src/Printinggui.cpp:275 src/Printinggui.cpp:278
+msgid "MOB"
+msgstr "Hombre Al Agua"
+
+#: src/Printinggui.cpp:282 src/Printinggui.cpp:285
+msgid "EPIRB"
+msgstr "EPIRB"
+
+#: src/Printinggui.cpp:300
+msgid "DSC Distress Alert"
+msgstr "Alerta DSC"
+
+#: src/Printinggui.cpp:303
+msgid "Distress Alert"
+msgstr "Alerta de socorro"
+
+#: src/Printinggui.cpp:307
+msgid "DSC Distress Cancel"
+msgstr "Cancelar Alerta de socorro DSC"
+
+#: src/Printinggui.cpp:310
+msgid "Distress Cancel"
+msgstr "Cancelar Alerta de socorro"
+
+#: src/Printinggui.cpp:314 src/Printinggui.cpp:317
+msgid "Distress Relay"
+msgstr "Retransmisión de Alerta de Socorro"
+
+#: src/Printinggui.cpp:321 src/Printinggui.cpp:324
+msgid "Relay Cancel"
+msgstr "Cancelar Retransmisión"
+
+#: src/Printinggui.cpp:405
+msgid "AIS"
+msgstr "AIS"
+
+#: src/Printinggui.cpp:412
+msgid "Transmit"
+msgstr "Transmitir"
+
+#: src/Printinggui.cpp:415
+msgid "Save to file"
+msgstr "Guardar archivo en"
+
+#: src/Printinggui.cpp:422
+msgid "MMSI"
+msgstr "MMSI"
+
+#: src/Printinggui_impl.cpp:184 src/Printinggui_impl.cpp:1745
+msgid "Please right-click and choose vessel start position"
+msgstr "Haga Clic derecho para elegir la posición inicial del barco"
+
+#: src/Printinggui_impl.cpp:191
+msgid "MMSI must be nine digits\n"
+"Edit using Preferences"
+msgstr "MMSI debe ser de nueve dígitos\n"
+"Edite en Preferencias"
+
+#: src/Printinggui_impl.cpp:212
+msgid "Printing has been stopped"
+msgstr "Printing se ha detenido"
+
+#: src/Printinggui_impl.cpp:256
+msgid "Vessel stopped"
+msgstr "Buque parado"
+
+#: src/Printinggui_impl.cpp:340
+msgid "Route or waypoint must be activated\n"
+"Has a connection been made in Options->Connections?"
+msgstr "La ruta o el waypoint deben estar activados\n"
+"¿Se ha realizado una conexión en Opciones->Conexiones?"
+
+#: src/Printinggui_impl.cpp:401 src/Printinggui_impl.cpp:421
+#: src/Printinggui_impl.cpp:440 src/Printinggui_impl.cpp:459
+#: src/Printinggui_impl.cpp:485 src/Printinggui_impl.cpp:503
+#: src/Printinggui_impl.cpp:529
+msgid "Printing has not been started"
+msgstr "Printing no se ha iniciado"
+
+#: src/Printinggui_impl.cpp:470 src/Printinggui_impl.cpp:514
+msgid "No DSC Distress activated"
+msgstr "No hay Alerta DSC activada"
+
+#: src/Printinggui_impl.cpp:1749
+msgid "Please start Printing"
+msgstr "Inicie Printing por favor"
+
+#: src/Printinggui_impl.cpp:1763
+msgid "Invalid Boat Polars file"
+msgstr "Archivo de polares del barco inválido"
+
+#: src/Printinggui_impl.cpp:1767
+msgid "Grib data is not available for the present date/time or location"
+msgstr "Los datos de Grib no están disponibles para la fecha/hora o ubicación actual"
+
+#: src/Printinggui_impl.cpp:1955
+msgid "Unable to read navobj file"
+msgstr "No se puede leer el archivo navobj"
+
+#: src/Printinggui_impl.cpp:1960
+msgid "Invalid xml file"
+msgstr "Archivo xml no valido"
+
+#: src/Printinggui_impl.cpp:2038
+msgid "Select the route to follow"
+msgstr "Seleccione la ruta a seguir"
+
+#: src/Printinggui_impl.cpp:2154
+msgid "Route not found"
+msgstr "Ruta no encontrada"
+
+#: src/Printinggui_impl.cpp:2220
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/Printinggui_impl.cpp:2222
+msgid "OK"
+msgstr "OK"
+
