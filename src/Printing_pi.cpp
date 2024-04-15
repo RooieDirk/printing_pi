@@ -121,19 +121,9 @@ int Printing_pi::Init(void) {
 bool Printing_pi::DeInit(void) {
   //    Record the dialog position
   if (NULL != m_pDialog) {
-    // Capture dialog position
-//     wxPoint p = m_pDialog->GetPosition();
-//     wxRect r = m_pDialog->GetRect();
-//     SetPrintingDialogX(p.x);
-//     SetPrintingDialogY(p.y);
-//     SetPrintingDialogSizeX(r.GetWidth());
-//     SetPrintingDialogSizeY(r.GetHeight());
     m_pDialog->Close();
     delete m_pDialog;
     m_pDialog = NULL;
-
-//     m_bShowPrinting = false;
-//     SetToolbarItemState(m_leftclick_tool_id, m_bShowPrinting);
   }
 
   SaveConfig();
@@ -287,13 +277,40 @@ bool Printing_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 void Printing_pi::Render(piDC &dc, PlugIn_ViewPort *vp)
 {
   dc.SetFont(g_MajorFont);
-  dc.SetPen(*wxWHITE_PEN);
+  dc.SetPen(wxPen(*wxWHITE,1));
   dc.SetTextForeground(*wxBLACK);
   dc.SetTextBackground(*wxWHITE);
   dc.SetBrush(*wxWHITE_BRUSH);
-//    dc.DrawText(_("TESTtest"), 100,100);
-dc.DrawLine(100,100,200,200);
-dc.DrawRectangle(0,0,g_MajorSize.x,vp->pix_height );
+  wxString s("TESTtest");
+
+//    dc.DrawText(s, 100,100);
+  wxRect ChartR(0,0,vp->pix_width, vp->pix_height);
+if(g_bBorderLeft){
+  dc.DrawRectangle(0,0,g_MajorSize.x+10,vp->pix_height );
+  ChartR=wxRect(g_MajorSize.x+10, 0, ChartR.GetWidth()-(g_MajorSize.x+10), ChartR.GetHeight() );
+}
+if(g_bBorderTop){
+  dc.DrawRectangle(0,0,vp->pix_width, g_MajorSize.y+10 );
+  ChartR=wxRect(ChartR.GetLeft(), g_MajorSize.y+10, ChartR.GetWidth(), ChartR.GetHeight()-(g_MajorSize.y+10));
+}
+if(g_bBorderRight){
+  dc.DrawRectangle(vp->pix_width-(g_MajorSize.x+10), 0, vp->pix_width, vp->pix_height );
+  ChartR=wxRect(ChartR.GetLeft(), ChartR.GetTop(), ChartR.GetWidth()-(g_MajorSize.x+10), ChartR.GetHeight());
+}
+if(g_bBorderBottom){
+  dc.DrawRectangle(0, vp->pix_height-(g_MajorSize.y+10), vp->pix_width, g_MajorSize.y+10 );
+  ChartR=wxRect(ChartR.GetLeft(), ChartR.GetTop(), ChartR.GetWidth(), ChartR.GetHeight()-(g_MajorSize.y+10));
+}
+
+dc.SetPen(wxPen(*wxBLACK,1));
+dc.SetBrush(*wxTRANSPARENT_BRUSH);
+dc.DrawRectangle(ChartR);
+wxRect Tics(ChartR);
+Tics.Inflate(4);
+dc.DrawRectangle(Tics);
+wxRect TicsMajor(Tics);
+TicsMajor.Inflate(4);
+dc.DrawRectangle(TicsMajor);
   }
 
 

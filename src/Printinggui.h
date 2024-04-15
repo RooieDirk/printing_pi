@@ -60,6 +60,7 @@ private:
   wxStaticLine* StaticLine1;
   wxStaticText* StaticText1;
   wxStaticText* StaticText2;
+  wxWindow* Pa;
   //*)
 
 };

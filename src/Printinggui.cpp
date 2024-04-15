@@ -41,6 +41,7 @@ extern wxSize g_MinorSize;
 
   Dlg::Dlg(wxWindow* parent,wxWindowID id)
   {
+    Pa = parent;
     //(*Initialize(Dlg)
     wxFlexGridSizer* ChartPanelFGSizer;
     wxGridBagSizer* MainGridBagSizer;
@@ -104,7 +105,7 @@ extern wxSize g_MinorSize;
     g_bBorderLeft = CheckBoxLeft->GetValue();
     g_bBorderRight = CheckBoxRight->GetValue();
     g_bBorderBottom = CheckBoxBottom->GetValue();
-
+    RequestRefresh(Pa);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
