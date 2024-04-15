@@ -16,6 +16,9 @@
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/fontpicker.h>
+#include "Printing_pi.h"
+
 //*)
 
 class Dlg: public wxDialog
@@ -30,6 +33,7 @@ private:
   //(*Handlers(Dlg)
   void OnQuit(wxCommandEvent& event);
   void OnCheckBoxClick(wxCommandEvent& event);
+
   //*)
 
   //(*Identifiers(Dlg)
@@ -58,7 +62,6 @@ private:
   wxStaticText* StaticText2;
   //*)
 
-  DECLARE_EVENT_TABLE()
 };
 
 
@@ -67,21 +70,36 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 class printingPreferences : public wxDialog
 {
-	private:
+public:
 
-	protected:
-// 		wxStdDialogButtonSizer* m_sdbSizer1;
-// 		wxButton* m_sdbSizer1OK;
-// 		wxButton* m_sdbSizer1Cancel;
+  printingPreferences(wxWindow* parent,  wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+  virtual ~printingPreferences();
+  static void SetSizes();
 
-	public:
-// 		wxCheckBox* m_cbTransmitAis;
-// 		wxCheckBox* m_cbAisToFile;
-// 		wxTextCtrl* m_textCtrlMMSI;
+  //(*Declarations(printingPreferences)
+  wxFontPickerCtrl* FontPickerMajor;
+  wxFontPickerCtrl* FontPickerMinor;
+  wxStaticText* StaticText1;
+  wxStaticText* StaticText2;
 
-		printingPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
+  wxFont MajorBckup;
+  wxFont MinorBckup;
+  wxWindow* Parent;
 
-		~printingPreferences();
+  //*)
+
+protected:
+  static const long ID_FONTPICKERMAJOR;
+  static const long ID_FONTPICKERMINOR;
+
+
+  //*)
+
+private:
+
+  //(*Handlers(printingPreferences)
+  void OnFontPickerFontChanged(wxFontPickerEvent& event);
+  //*)
+
 
 };
-

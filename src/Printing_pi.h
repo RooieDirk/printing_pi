@@ -41,6 +41,8 @@
 
 #include "config.h"
 
+#include "pidc.h"
+
 #include "json/reader.h"
 #include "json/writer.h"
 
@@ -84,22 +86,17 @@ public:
 
     //    Optional plugin overrides
     void SetColorScheme(PI_ColorScheme cs);
-
+    bool RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp);
+    bool RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
+    void Render(piDC &dc, PlugIn_ViewPort *vp);
     //    The override PlugIn Methods
     void OnContextMenuItemCallback(int id);
 
 
 
     //    Other public methods
-    void SetPrintingDialogX(int x) { m_hr_dialog_x = x; };
-    void SetPrintingDialogY(int x) { m_hr_dialog_y = x; };
-    void SetPrintingDialogWidth(int x) { m_hr_dialog_width = x; };
-    void SetPrintingDialogHeight(int x) { m_hr_dialog_height = x; };
-    void SetPrintingDialogSizeX(int x) { m_hr_dialog_sx = x; }
-    void SetPrintingDialogSizeY(int x) { m_hr_dialog_sy = x; }
     void OnPrintingDialogClose();
 
-    int m_hr_dialog_x, m_hr_dialog_y;
 
     double GetCursorLat(void) { return m_cursor_lat; }
     double GetCursorLon(void) { return m_cursor_lon; }
@@ -111,6 +108,7 @@ public:
 
     wxString StandardPath();
     wxBitmap m_panelBitmap;
+
 
 
 
@@ -136,7 +134,7 @@ private:
     int m_display_width, m_display_height;
     int m_leftclick_tool_id;
     bool m_bPrintingShowIcon;
-    bool m_bShowPrinting;
+    //bool m_bShowPrinting;
 
     bool m_bCopyUseAis;
     bool m_bCopyUseFile;
