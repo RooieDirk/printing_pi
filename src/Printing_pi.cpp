@@ -33,20 +33,19 @@
 
 #include "Printing_pi.h"
 #include "Printinggui.h"
-#include "Printinggui_impl.h"
 #include "ocpn_plugin.h"
 
 class Printing_pi;
 class Dlg;
 
-using namespace std;
 
 // the class factories, used to create and destroy instances of the PlugIn
 
 extern "C" DECL_EXP opencpn_plugin* create_pi(void* ppimgr) {
   return new Printing_pi(ppimgr);
 }
-
+extern "C" DECL_EXP int AddCanvasContextMenuItem(wxMenuItem *pitem,
+                                                 opencpn_plugin *pplugin);
 extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p) { delete p; }
 
 //---------------------------------------------------------------------------------------------------------
@@ -71,37 +70,38 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p) { delete p; }
  *    SVG icon_name.svg is used, otherwise icon_name.png
  */
 
-static wxBitmap load_plugin(const char* icon_name, const char* api_name) {
-  wxBitmap bitmap;
-  wxFileName fn;
-  auto path = GetPluginDataDir(api_name);
-  fn.SetPath(path);
-  fn.AppendDir("data");
-  fn.SetName(icon_name);
-#ifdef ocpnUSE_SVG
-  wxLogDebug("Loading SVG icon");
-  fn.SetExt("svg");
-  const static int ICON_SIZE = 48;  // FIXME: Needs size from GUI
-  bitmap = GetBitmapFromSVGFile(fn.GetFullPath(), ICON_SIZE, ICON_SIZE);
-#else
-  wxLogDebug("Loading png icon");
-  fn.SetExt("png");
-  path = fn.GetFullPath();
-  if (!wxImage::CanRead(path)) {
-    wxLogDebug("Initiating image handlers.");
-    wxInitAllImageHandlers();
-  }
-  wxImage panelIcon(path);
-  bitmap = wxBitmap(panelIcon);
-#endif
-  wxLogDebug("Icon loaded, result: %s", bitmap.IsOk() ? "ok" : "fail");
-  return bitmap;
-}
+// static wxBitmap load_plugin(const char* icon_name, const char* api_name) {
+//
+//   wxFileName fn;
+//   auto path = GetPluginDataDir(api_name);
+//   fn.SetPath(path);
+//   fn.AppendDir("data");
+//   fn.SetName(icon_name);
+// #ifdef ocpnUSE_SVG
+//   wxLogDebug("Loading SVG icon");
+//   fn.SetExt("svg");
+//   const static int ICON_SIZE = 48;  // FIXME: Needs size from GUI
+//   bitmap = GetBitmapFromSVGFile(fn.GetFullPath(), ICON_SIZE, ICON_SIZE);
+// #else
+//   wxLogDebug("Loading png icon");
+//   fn.SetExt("png");
+//   path = fn.GetFullPath();
+//   if (!wxImage::CanRead(path)) {
+//     wxLogDebug("Initiating image handlers.");
+//     wxInitAllImageHandlers();
+//   }
+//   wxImage panelIcon(path);
+//   bitmap = wxBitmap(panelIcon);
+// #endif
+//   wxLogDebug("Icon loaded, result: %s", bitmap.IsOk() ? "ok" : "fail");
+//   return bitmap;
+// }
 
 Printing_pi::Printing_pi(void* ppimgr) : opencpn_plugin_118(ppimgr) {
   // Create the PlugIn icons
-  initialize_images();
-  m_panelBitmap = load_plugin("printing_panel_icon", "Printing_pi");
+//   initialize_images();
+//   m_panelBitmap = load_plugin("printing_panel_icon", "Printing_pi");
+
   m_bShowPrinting = false;
 }
 
@@ -140,27 +140,18 @@ int Printing_pi::Init(void) {
 
   //    And load the configuration items
   LoadConfig();
+  wxMenu dummy_menu;
+  m_position_menu_id = AddCanvasContextMenuItem(
+      new wxMenuItem(&dummy_menu, -1, _("Select Chart boundary scales")),
+      this);
 
   //    This PlugIn needs a toolbar icon, so request its insertion
-  if (m_bPrintingShowIcon) {
-#ifdef ocpnUSE_SVG
-    m_leftclick_tool_id =
-        InsertPlugInToolSVG("Printing", _svg_printing, _svg_printing,
-                            _svg_printing_toggled, wxITEM_CHECK, "Printing",
-                            "", NULL, Printing_TOOL_POSITION, 0, this);
-#else
-    m_leftclick_tool_id = InsertPlugInTool(
-        "", _img_PrintingIcon, _img_PrintingIcon, wxITEM_CHECK,
-        _("Printing"), "", NULL, Printing_TOOL_POSITION, 0, this);
-#endif
-  }
+
 
   m_pDialog = NULL;
 
   return (WANTS_OVERLAY_CALLBACK | WANTS_OPENGL_OVERLAY_CALLBACK |
-          WANTS_TOOLBAR_CALLBACK | INSTALLS_TOOLBAR_TOOL | WANTS_CURSOR_LATLON |
-          WANTS_NMEA_SENTENCES | WANTS_AIS_SENTENCES | WANTS_PREFERENCES |
-          WANTS_PLUGIN_MESSAGING | WANTS_CONFIG);
+  WANTS_PREFERENCES | INSTALLS_CONTEXTMENU_ITEMS| WANTS_CONFIG);
 }
 
 bool Printing_pi::DeInit(void) {
@@ -173,12 +164,6 @@ bool Printing_pi::DeInit(void) {
     SetPrintingDialogY(p.y);
     SetPrintingDialogSizeX(r.GetWidth());
     SetPrintingDialogSizeY(r.GetHeight());
-
-    if ((m_pDialog->m_Timer != NULL) &&
-        (m_pDialog->m_Timer
-             ->IsRunning())) {  // need to stop the timer or crash on exit
-      m_pDialog->m_Timer->Stop();
-    }
     m_pDialog->Close();
     delete m_pDialog;
     m_pDialog = NULL;
@@ -222,7 +207,6 @@ wxString Printing_pi::GetShortDescription() { return PKG_SUMMARY; }
 
 wxString Printing_pi::GetLongDescription() { return PKG_DESCRIPTION; }
 
-int Printing_pi::GetToolbarToolCount(void) { return 1; }
 
 void Printing_pi::SetColorScheme(PI_ColorScheme cs) {
   if (NULL == m_pDialog) return;
@@ -233,80 +217,38 @@ void Printing_pi::SetColorScheme(PI_ColorScheme cs) {
 void Printing_pi::ShowPreferencesDialog(wxWindow* parent) {
   printingPreferences* Pref = new printingPreferences(parent);
 
-  Pref->m_cbTransmitAis->SetValue(m_bCopyUseAis);
-  Pref->m_cbAisToFile->SetValue(m_bCopyUseFile);
-  Pref->m_textCtrlMMSI->SetValue(m_tCopyMMSI);
+//   Pref->m_cbTransmitAis->SetValue(m_bCopyUseAis);
+//   Pref->m_cbAisToFile->SetValue(m_bCopyUseFile);
+//   Pref->m_textCtrlMMSI->SetValue(m_tCopyMMSI);
 
   if (Pref->ShowModal() == wxID_OK) {
-    bool copyAis = Pref->m_cbTransmitAis->GetValue();
-    bool copyFile = Pref->m_cbAisToFile->GetValue();
-    wxString copyMMSI = Pref->m_textCtrlMMSI->GetValue();
-
-    if (m_bCopyUseAis != copyAis || m_bCopyUseFile != copyFile ||
-        m_tCopyMMSI != copyMMSI) {
-      m_bCopyUseAis = copyAis;
-      m_bCopyUseFile = copyFile;
-      m_tCopyMMSI = copyMMSI;
+//     bool copyAis = Pref->m_cbTransmitAis->GetValue();
+//     bool copyFile = Pref->m_cbAisToFile->GetValue();
+//     wxString copyMMSI = Pref->m_textCtrlMMSI->GetValue();
+//
+//     if (m_bCopyUseAis != copyAis || m_bCopyUseFile != copyFile ||
+//         m_tCopyMMSI != copyMMSI) {
+//       m_bCopyUseAis = copyAis;
+//       m_bCopyUseFile = copyFile;
+//       m_tCopyMMSI = copyMMSI;
     }
 
     if (m_pDialog) {
-      m_pDialog->m_bUseAis = m_bCopyUseAis;
-      m_pDialog->m_bUseFile = m_bCopyUseFile;
-      m_pDialog->m_tMMSI = m_tCopyMMSI;
+//       m_pDialog->m_bUseAis = m_bCopyUseAis;
+//       m_pDialog->m_bUseFile = m_bCopyUseFile;
+//       m_pDialog->m_tMMSI = m_tCopyMMSI;
     }
 
     SaveConfig();
 
     RequestRefresh(m_parent_window);  // refresh main window
-  }
+
 
   delete Pref;
   Pref = NULL;
 }
 
-void Printing_pi::OnToolbarToolCallback(int id) {
-  if (NULL == m_pDialog) {
-    m_pDialog = new Dlg(m_parent_window);
-    m_pDialog->plugin = this;
-    m_pDialog->m_Timer = new wxTimer(m_pDialog);
-    m_pDialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
-    m_pDialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
 
-    wxMenu dummy_menu;
-    m_position_menu_id = AddCanvasContextMenuItem(
-        new wxMenuItem(&dummy_menu, -1, _("Select Vessel Start Position")),
-        this);
-    SetCanvasContextMenuItemViz(m_position_menu_id, true);
-  }
-
-  // m_pDialog->Fit();
-  // Toggle
-  m_bShowPrinting = !m_bShowPrinting;
-
-  //    Toggle dialog?
-  if (m_bShowPrinting) {
-    m_pDialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
-    m_pDialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
-    m_pDialog->Show();
-
-  } else {
-    m_pDialog->Hide();
-  }
-
-  // Toggle is handled by the toolbar but we must keep plugin manager b_toggle
-  // updated to actual status to ensure correct status upon toolbar rebuild
-  SetToolbarItemState(m_leftclick_tool_id, m_bShowPrinting);
-
-  // Capture dialog position
-  wxPoint p = m_pDialog->GetPosition();
-  wxRect r = m_pDialog->GetRect();
-  SetPrintingDialogX(p.x);
-  SetPrintingDialogY(p.y);
-  SetPrintingDialogSizeX(r.GetWidth());
-  SetPrintingDialogSizeY(r.GetHeight());
-
-  RequestRefresh(m_parent_window);  // refresh main window
-}
 
 bool Printing_pi::LoadConfig(void) {
   wxFileConfig* pConf = (wxFileConfig*)m_pconfig;
@@ -384,7 +326,6 @@ bool Printing_pi::SaveConfig(void) {
 
 void Printing_pi::OnPrintingDialogClose() {
   m_bShowPrinting = false;
-  SetToolbarItemState(m_leftclick_tool_id, m_bShowPrinting);
   m_pDialog->Hide();
   SaveConfig();
 
@@ -392,134 +333,16 @@ void Printing_pi::OnPrintingDialogClose() {
 }
 
 void Printing_pi::OnContextMenuItemCallback(int id) {
-  if (!m_pDialog) return;
+  if(id==m_position_menu_id){
+  if (!m_pDialog) m_pDialog = new Dlg(m_parent_window, -1);
 
-  if (id == m_position_menu_id) {
-    m_cursor_lat = GetCursorLat();
-    m_cursor_lon = GetCursorLon();
-
-    m_pDialog->OnContextMenu(m_cursor_lat, m_cursor_lon);
-  }
+  if (m_pDialog->IsShown())
+    m_pDialog->Hide();
+  else
+    m_pDialog->Show();
+  }//m_pDialog->OnContextMenu(m_cursor_lat, m_cursor_lon);
 }
 
-void Printing_pi::SetCursorLatLon(double lat, double lon) {
-  m_cursor_lat = lat;
-  m_cursor_lon = lon;
-}
 
-void Printing_pi::SetPluginMessage(wxString& message_id,
-                                     wxString& message_body) {
-  if (message_id == "GRIB_TIMELINE") {
-    Json::CharReaderBuilder builder;
-    Json::CharReader* reader = builder.newCharReader();
 
-    Json::Value value;
-    string errors;
 
-    bool parsingSuccessful = reader->parse(
-        message_body.c_str(), message_body.c_str() + message_body.size(),
-        &value, &errors);
-    delete reader;
-
-    if (!parsingSuccessful) {
-      wxLogMessage("Grib_TimeLine error");
-      return;
-    }
-
-    // int day = value["Day"].asInt();
-
-    wxDateTime time;
-    time.Set(value["Day"].asInt(), (wxDateTime::Month)value["Month"].asInt(),
-             value["Year"].asInt(), value["Hour"].asInt(),
-             value["Minute"].asInt(), value["Second"].asInt());
-
-    wxString dt;
-    dt = time.Format("%Y-%m-%d  %H:%M ");
-
-    if (m_pDialog) {
-      m_pDialog->m_GribTimelineTime = time.ToUTC();
-      // m_pDialog->m_textCtrl1->SetValue(dt);
-    }
-  }
-  if (message_id == "GRIB_TIMELINE_RECORD") {
-    Json::CharReaderBuilder builder;
-    Json::CharReader* reader = builder.newCharReader();
-
-    Json::Value value;
-    string errors;
-
-    bool parsingSuccessful = reader->parse(
-        message_body.c_str(), message_body.c_str() + message_body.size(),
-        &value, &errors);
-    delete reader;
-
-    if (!parsingSuccessful) {
-      wxLogMessage("Grib_TimeLine_Record error");
-      return;
-    }
-
-    static bool shown_warnings;
-    if (!shown_warnings) {
-      shown_warnings = true;
-
-      int grib_version_major = value["GribVersionMajor"].asInt();
-      int grib_version_minor = value["GribVersionMinor"].asInt();
-
-      int grib_version = 1000 * grib_version_major + grib_version_minor;
-      int grib_min = 1000 * GRIB_MIN_MAJOR + GRIB_MIN_MINOR;
-      int grib_max = 1000 * GRIB_MAX_MAJOR + GRIB_MAX_MINOR;
-
-      if (grib_version < grib_min || grib_version > grib_max) {
-        wxMessageDialog mdlg(
-            m_parent_window,
-            _("Grib plugin version not supported.") + "\n\n" +
-                wxString::Format(_("Use versions %d.%d to %d.%d"),
-                                 GRIB_MIN_MAJOR, GRIB_MIN_MINOR, GRIB_MAX_MAJOR,
-                                 GRIB_MAX_MINOR),
-            _("Weather Routing"), wxOK | wxICON_WARNING);
-        mdlg.ShowModal();
-      }
-    }
-
-    wxString sptr = value["TimelineSetPtr"].asString();
-
-    wxCharBuffer bptr = sptr.To8BitData();
-    const char* ptr = bptr.data();
-
-    GribRecordSet* gptr;
-    sscanf(ptr, "%p", &gptr);
-
-    double dir, spd;
-
-    m_bGribValid = GribCurrent(gptr, m_grib_lat, m_grib_lon, dir, spd);
-
-    m_tr_spd = spd;
-    m_tr_dir = dir;
-  }
-}
-
-bool Printing_pi::GribWind(GribRecordSet* grib, double lat, double lon,
-                             double& WG, double& VWG) {
-  if (!grib) return false;
-
-  if (!GribRecord::getInterpolatedValues(
-          VWG, WG, grib->m_GribRecordPtrArray[Idx_WIND_VX],
-          grib->m_GribRecordPtrArray[Idx_WIND_VY], lon, lat))
-    return false;
-
-  VWG *= 3.6 / 1.852;  // knots
-
-#if 0
-// test
-	VWG = 0.;
-	WG = 0.;
-#endif
-
-  return true;
-}
-
-void Printing_pi::SetNMEASentence(wxString& sentence) {
-  if (NULL != m_pDialog) {
-    m_pDialog->SetNMEAMessage(sentence);
-  }
-}

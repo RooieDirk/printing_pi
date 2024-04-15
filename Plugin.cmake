@@ -57,13 +57,6 @@ set(SRC
     src/icons.cpp
     src/Printinggui.h
     src/Printinggui.cpp
-    src/Printinggui_impl.cpp
-    src/Printinggui_impl.h
-    src/AisMaker.h
-    src/AisMaker.cpp
-    src/GribRecord.cpp
-    src/GribRecordSet.h
-    src/GribRecord.h
 )
 
 set(PKG_API_LIB api-18)  #  A dir in opencpn-libs/ e. g., api-17 or api-16

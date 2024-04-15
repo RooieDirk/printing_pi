@@ -45,8 +45,8 @@
 #include "json/writer.h"
 
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
-#include "Printinggui_impl.h"
-#include "GribRecordSet.h"
+#include "Printinggui.h"
+
 
 // Define minimum and maximum versions of the grib plugin supported
 #define GRIB_MAX_MAJOR 4
@@ -55,25 +55,6 @@
 #define GRIB_MIN_MINOR 1
 
 class Dlg;
-
-static inline bool GribCurrent(
-    GribRecordSet* grib, double lat, double lon, double& C, double& VC)
-{
-    if (!grib)
-        return false;
-
-    if (!GribRecord::getInterpolatedValues(VC, C,
-            grib->m_GribRecordPtrArray[Idx_WIND_VX],
-            grib->m_GribRecordPtrArray[Idx_WIND_VY], lon, lat))
-        return false;
-
-    VC *= 3.6 / 1.852; // knots
-
-    // C += 180;
-    if (C > 360)
-        C -= 360;
-    return true;
-}
 
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
@@ -100,17 +81,14 @@ public:
     wxString GetShortDescription();
     wxString GetLongDescription();
 
-    //    The required override PlugIn Methods
-    int GetToolbarToolCount(void);
-    void OnToolbarToolCallback(int id);
 
     //    Optional plugin overrides
     void SetColorScheme(PI_ColorScheme cs);
 
     //    The override PlugIn Methods
     void OnContextMenuItemCallback(int id);
-    void SetCursorLatLon(double lat, double lon);
-    void SetNMEASentence(wxString& sentence);
+
+
 
     //    Other public methods
     void SetPrintingDialogX(int x) { m_hr_dialog_x = x; };
@@ -127,12 +105,7 @@ public:
     double GetCursorLon(void) { return m_cursor_lon; }
 
     void ShowPreferencesDialog(wxWindow* parent);
-    void SetPluginMessage(wxString& message_id, wxString& message_body);
-    bool GribWind(
-        GribRecordSet* grib, double lat, double lon, double& WG, double& VWG);
 
-    bool m_bGribValid;
-    double m_grib_lat, m_grib_lon;
     double m_tr_spd;
     double m_tr_dir;
 
@@ -168,6 +141,7 @@ private:
     bool m_bCopyUseAis;
     bool m_bCopyUseFile;
     wxString m_tCopyMMSI;
+
 };
 
 #endif

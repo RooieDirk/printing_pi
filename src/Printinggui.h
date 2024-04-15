@@ -1,115 +1,66 @@
-///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
-// http://www.wxformbuilder.org/
-//
-// PLEASE DO *NOT* EDIT THIS FILE!
-///////////////////////////////////////////////////////////////////////////
+
 
 #pragma once
 
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/intl.h>
-#include <wx/gauge.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/sizer.h>
-#include <wx/slider.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/tglbtn.h>
-#include <wx/stattext.h>
-#include <wx/statbox.h>
-#include <wx/timer.h>
-#include <wx/dialog.h>
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#include <wx/glcanvas.h>
+#endif // precompiled headers
+
 #include <wx/checkbox.h>
+#include <wx/dialog.h>
+#include <wx/gbsizer.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
+#include <wx/stattext.h>
+//*)
 
-///////////////////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class PrintingBase
-///////////////////////////////////////////////////////////////////////////////
-class PrintingBase : public wxDialog
+class Dlg: public wxDialog
 {
-	private:
+public:
 
-	protected:
-		wxTextCtrl* m_textCtrlRudderPort;
-		wxButton* m_buttonMid;
-		wxTextCtrl* m_textCtrlRudderStbd;
-		wxButton* m_bpPlay;
-		wxButton* m_bpStop;
-		wxToggleButton* m_buttonPause;
-		wxStaticText* m_staticTextHeading;
-		wxStaticText* m_staticTextKnots;
-		wxStaticText* m_staticText81;
-		wxStaticText* m_staticText7;
-		wxStaticText* m_staticText8;
-		wxButton* m_buttonStandby;
-		wxButton* m_buttonAuto;
-		wxButton* m_button7;
-		wxButton* m_buttonWind;
-		wxButton* m_buttonMinus1;
-		wxButton* m_buttonMinus10;
-		wxButton* m_buttonPlus10;
-		wxButton* m_buttonPlus1;
-		wxToggleButton* m_buttonSART;
-		wxToggleButton* m_buttonMOB;
-		wxToggleButton* m_buttonEPIRB;
-		wxToggleButton* m_buttonDistressAlert;
-		wxToggleButton* m_buttonDistressCancel;
-		wxToggleButton* m_buttonDistressRelay;
-		wxToggleButton* m_buttonRelayCancel;
-		wxToggleButton* m_buttonCollision;
+  Dlg(wxWindow* parent,wxWindowID id = -1);
+  virtual ~Dlg();
 
-		// Virtual event handlers, override them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnDLeftClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnMidships( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnStart( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnStandby( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAuto( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFollow( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnWind( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMinus1( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMinus10( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlus10( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlus1( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSART( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMOB( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEPIRB( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressAlert( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressCancel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressRelay( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRelayCancel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCollision( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
+private:
 
+  //(*Handlers(Dlg)
+  void OnQuit(wxCommandEvent& event);
+  void OnCheckBoxClick(wxCommandEvent& event);
+  //*)
 
-	public:
-		wxGauge* m_gaugeRudderPort;
-		wxGauge* m_gaugeRudderStbd;
-		wxSlider* m_SliderRudder;
-		wxStaticText* m_stHeading;
-		wxStaticText* m_stSpeed;
-		wxSlider* m_SliderSpeed;
-		wxTextCtrl* m_textCtrlSART;
-		wxTimer m_timer1;
+  //(*Identifiers(Dlg)
+  static const long ID_CHECKBOX_TOP;
+  static const long ID_CHECKBOX_LEFT;
+  static const long ID_PANEL2;
+  static const long ID_STATICTEXT1;
+  static const long ID_STATICTEXT2;
+  static const long ID_CHARTPANEL;
+  static const long ID_CHECKBOX_RIGHT;
+  static const long ID_PANEL_RIGHT;
+  static const long ID_CHECKBOX_BOTTOM;
+  static const long ID_STATICLINE1;
+  //*)
 
-		PrintingBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+  //(*Declarations(Dlg)
+  wxCheckBox* CheckBoxBottom;
+  wxCheckBox* CheckBoxLeft;
+  wxCheckBox* CheckBoxRight;
+  wxCheckBox* CheckBoxTop;
+  wxPanel* ChartPanel;
+  wxPanel* LeftPanel;
+  wxPanel* RightPanel;
+  wxStaticLine* StaticLine1;
+  wxStaticText* StaticText1;
+  wxStaticText* StaticText2;
+  //*)
 
-		~PrintingBase();
-
+  DECLARE_EVENT_TABLE()
 };
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class printingPreferences
@@ -119,14 +70,14 @@ class printingPreferences : public wxDialog
 	private:
 
 	protected:
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+// 		wxStdDialogButtonSizer* m_sdbSizer1;
+// 		wxButton* m_sdbSizer1OK;
+// 		wxButton* m_sdbSizer1Cancel;
 
 	public:
-		wxCheckBox* m_cbTransmitAis;
-		wxCheckBox* m_cbAisToFile;
-		wxTextCtrl* m_textCtrlMMSI;
+// 		wxCheckBox* m_cbTransmitAis;
+// 		wxCheckBox* m_cbAisToFile;
+// 		wxTextCtrl* m_textCtrlMMSI;
 
 		printingPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
 
